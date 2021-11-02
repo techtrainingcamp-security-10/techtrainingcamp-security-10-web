@@ -1,21 +1,27 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { Title } from 'react-head';
 import { useSize } from 'ahooks';
 
 import * as Styled from './simple.styled';
-import { getSize } from '~/theme';
+import { getSize } from './theme';
 
-const SimpleLayout = ({ headTitle = 'PingCAP Account', title = 'TiDB', subtitle = 'SQL at Scale', children }) => {
+type SimpleLayoutProps = {
+  headTitle?: any,
+  title?: any,
+  subtitle?: any,
+  children: any,
+};
+
+const SimpleLayout: React.FC<SimpleLayoutProps> = ({ headTitle = 'TST | 10', title = 'TST | 10', subtitle = '抓到你了', children }) => {
   useEffect(() => {
     // react-head would not overwrite default title tag
     // see https://github.com/tizmagik/react-head/issues/83
     // why here? if we remove title tag early than react-head injected it, the title will change to the host shortly.
     const defaultTitle = document.getElementById('default-title');
-    if (defaultTitle) defaultTitle.parentNode.removeChild(defaultTitle);
+    if (defaultTitle) defaultTitle.parentNode!.removeChild(defaultTitle);
   }, []);
 
-  const containerRef = useRef();
+  const containerRef = useRef(null);
   const { width } = useSize(containerRef);
 
   const size = useMemo(() => getSize(width), [width]);
@@ -23,8 +29,8 @@ const SimpleLayout = ({ headTitle = 'PingCAP Account', title = 'TiDB', subtitle 
   return (
     <>
       <Title>{headTitle}</Title>
-      <Styled.Container ref={containerRef} $size={size}>
-        <Styled.Main $size={size}>
+      <Styled.Container ref={containerRef}>
+        <Styled.Main>
           <Styled.Logo />
           <Styled.Title>{title}</Styled.Title>
           <Styled.SubTitle>{subtitle}</Styled.SubTitle>
@@ -33,14 +39,6 @@ const SimpleLayout = ({ headTitle = 'PingCAP Account', title = 'TiDB', subtitle 
       </Styled.Container>
     </>
   );
-};
-
-SimpleLayout.displayName = 'SimpleLayout';
-SimpleLayout.propTypes = {
-  headTitle: PropTypes.string,
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  children: PropTypes.element,
 };
 
 export default SimpleLayout;

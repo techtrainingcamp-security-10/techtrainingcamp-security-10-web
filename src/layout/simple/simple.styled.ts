@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { colors, mixins } from '../../styles';
+import logoSvg from '../../assets/rust.svg?url';
 
 export const Container = styled.div`
   ${mixins.flexCenter()};
@@ -14,6 +15,13 @@ export const Main = styled.main`
   border-radius: 4px;
   background-color: ${colors.M1};
   width: 360px;
+`;
+
+export const Logo = styled.img.attrs({ alt: 'logo', src: logoSvg })`
+  display: block;
+  max-width: 100px;
+  margin: 0 auto;
+  color: ${colors.B1}
 `;
 
 export const Title = styled.h2`

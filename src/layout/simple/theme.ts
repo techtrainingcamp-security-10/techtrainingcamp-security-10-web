@@ -14,7 +14,8 @@ const SIZE_BREAKPOINTS = {
   [SIZES.large]: 99999,
 };
 
-export const getSize = (width: number) => {
+export const getSize = (width?: number) => {
+  if (!!!width) return
   for (let [size, breakpoint] of Object.entries(SIZE_BREAKPOINTS)) {
     if (width < breakpoint) {
       return size;

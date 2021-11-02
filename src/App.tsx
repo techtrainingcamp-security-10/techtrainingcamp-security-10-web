@@ -1,8 +1,12 @@
+import './App.less'
+import 'antd/dist/antd.less';
 import AllRoutes from './routes'
-import './App.sass'
+import { HeadProvider } from 'react-head';
 
 function App () {
-  return <AllRoutes />
+  return <HeadProvider>
+    <AllRoutes />
+  </HeadProvider>
 }
 
 export default App

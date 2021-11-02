@@ -1,4 +1,5 @@
 import React from 'react';
+import Login from '../pages/login'
 
 export interface RouteWithComponent {
     component?: React.ComponentType<{ children?: React.ReactNode, [prop: string]: any }>
@@ -12,7 +13,12 @@ export const routes: RouteWithComponent = {
         {
             path: "/",
             exact: true,
-            component: React.Fragment,
+            component: Login,
+        },
+        {
+            path: "/login",
+            exact: true,
+            component: Login,
         }
     ],
 }
