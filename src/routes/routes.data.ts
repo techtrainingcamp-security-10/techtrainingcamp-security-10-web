@@ -1,24 +1,30 @@
 import React from 'react';
 import Login from '../pages/login'
+import Register from '../pages/register';
 
 export interface RouteWithComponent {
-    component?: React.ComponentType<{ children?: React.ReactNode, [prop: string]: any }>
-    routes?: RouteWithComponent[]
-    exact?: boolean
-    path?: string
+  component?: React.ComponentType<{ children?: React.ReactNode, [prop: string]: any }>
+  routes?: RouteWithComponent[]
+  exact?: boolean
+  path?: string
 }
 
 export const routes: RouteWithComponent = {
-    routes: [
-        {
-            path: "/",
-            exact: true,
-            component: Login,
-        },
-        {
-            path: "/login",
-            exact: true,
-            component: Login,
-        }
-    ],
+  routes: [
+    {
+      path: "/",
+      exact: true,
+      component: Login,
+    },
+    {
+      path: "/login",
+      exact: true,
+      component: Login,
+    },
+    {
+      path: "/register",
+      exact: true,
+      component: Register,
+    }
+  ],
 }

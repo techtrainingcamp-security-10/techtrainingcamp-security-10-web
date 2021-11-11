@@ -20,6 +20,8 @@ export default defineConfig({
         modifyVars: {
           'primary-color': '#be1d32',
           'link-color': '#be1d32',
+          'disabled-bg': 'rgba(190, 29, 50, 0.6)',
+          'disabled-color': '#fff'
         },
         javascriptEnabled: true,
       }

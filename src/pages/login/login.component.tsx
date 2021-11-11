@@ -13,7 +13,7 @@ const VerifyInput = withVerifyCode(Input);
 
 const Login: React.FC<any> = () => {
   const [option, setOption] = useState(0);
-  const [disabled, setDiabled] = useState(false);
+  const [disabled, setDiabled] = useState(true);
   const [verifyCodeDisabled, setVerifyCodeDiabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form] = Form.useForm();
