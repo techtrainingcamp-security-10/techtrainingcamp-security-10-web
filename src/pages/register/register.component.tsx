@@ -43,6 +43,11 @@ const Register: React.FC<any> = () => {
         <Form.Item name={confirmPassword.name}>
           <Input.Password size="large" {...confirmPassword}></Input.Password>
         </Form.Item>
+        <Flex>
+          <span>
+            <RouteLink to={`/login`}>已有账号？前往登录</RouteLink>
+          </span>
+        </Flex>
         <FullWidthButton
           type="primary"
           htmlType="submit"
@@ -50,11 +55,6 @@ const Register: React.FC<any> = () => {
           disabled={disabled}
           loading={isSubmitting}
         >注册</FullWidthButton>
-        <Flex>
-          <span>
-            <RouteLink to={`/login`}>登录</RouteLink>
-          </span>
-        </Flex>
       </Form>
     </SimpleLayout>
   );
