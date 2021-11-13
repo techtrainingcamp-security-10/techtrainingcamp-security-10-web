@@ -3,6 +3,6 @@
 > 一个粗制滥造的前端页面（bushi
 
 + [x] Login UI
-+ [ ] Register UI
++ [x] Register UI
 + [ ] Login Api
 + [ ] Register Api

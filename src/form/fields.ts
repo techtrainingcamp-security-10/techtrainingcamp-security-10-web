@@ -89,7 +89,7 @@ export const loginInitialValues = buildInitialValues(loginForm);
 export const registerForm = {
   verifyCode,
   phone,
-  password,
+  newPassword,
   confirmPassword,
   email,
 };
