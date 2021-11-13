@@ -20,7 +20,7 @@ const VerifyInput = withVerifyCode(Input);
 const {
   verifyCode,
   phone,
-  password,
+  newPassword,
   confirmPassword,
   email
 } = registerForm;
@@ -55,8 +55,8 @@ const Register: React.FC<any> = () => {
                 size="large"
               />
             </FormItem>
-            <FormItem name={password.name}>
-              <Input.Password size="large" {...password}></Input.Password>
+            <FormItem name={newPassword.name}>
+              <Input.Password size="large" {...newPassword}></Input.Password>
             </FormItem>
             <FormItem name={confirmPassword.name}>
               <Input.Password
