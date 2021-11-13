@@ -1,63 +1,80 @@
-import { Form, Input, Button, Divider } from "antd";
 import React, { useState, useEffect, FormEvent } from "react";
+import { Formik } from "formik";
+import { Form, FormItem, Input } from "formik-antd";
 import { SimpleLayout } from "../../layout";
-import { verifyCode, phone, identifier, password, newPassword, confirmPassword, email } from "../../form/fields";
-import { FullWidthButton, PhoneInputPrefix } from "../../components/form";
-import withVerifyCode from "../../components/verifyCodeInput"
-import { ActionLink, RouteLink } from "../../components/link";
+import {
+  registerForm,
+  registerFormSchema,
+  registerInitialValues,
+} from "../../form/fields";
+import {
+  PhoneInputPrefix,
+  SubmitButton,
+} from "../../components/form";
+import withVerifyCode from "../../components/verifyCodeInput";
+import { RouteLink } from "../../components/link";
 import { Flex } from "../../components/layout";
 
 const VerifyInput = withVerifyCode(Input);
 
+const {
+  verifyCode,
+  phone,
+  password,
+  confirmPassword,
+  email
+} = registerForm;
 
 const Register: React.FC<any> = () => {
-  const [disabled, setDiabled] = useState(false);
-  const [verifyCodeDisabled, setVerifyCodeDiabled] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form] = Form.useForm();
 
-  const formValidator = (e: FormEvent) => { setDiabled(true); }
   return (
     <SimpleLayout headTitle="注册 | TST 10">
-      <Form form={form} onChange={(e: FormEvent) => {formValidator(e)}}>
-        <Form.Item name={phone.name}>
-          <Input prefix={<PhoneInputPrefix>+86</PhoneInputPrefix>} {...phone} size="large" />
-        </Form.Item>
-        <Form.Item name={email.name}>
-          <Input {...email} size="large"></Input>
-        </Form.Item>
-        <Form.Item name={verifyCode.name}>
-          <VerifyInput
-            {...verifyCode}
-            sendVerifyCode={() => new Promise((resolve: any, reject: any) => {
-              console.log('not thing here');
-              resolve();
-            })}
-            buttonDisabled={verifyCodeDisabled}
-            size="large"
-          />
-        </Form.Item>
-        <Form.Item name={password.name}>
-          <Input.Password size="large" {...password}></Input.Password>
-        </Form.Item>
-        <Form.Item name={confirmPassword.name}>
-          <Input.Password size="large" {...confirmPassword}></Input.Password>
-        </Form.Item>
-        <Flex>
-          <span>
-            <RouteLink to={`/login`}>已有账号？前往登录</RouteLink>
-          </span>
-        </Flex>
-        <FullWidthButton
-          type="primary"
-          htmlType="submit"
-          size="large"
-          disabled={disabled}
-          loading={isSubmitting}
-        >注册</FullWidthButton>
-      </Form>
+      <Formik validationSchema={registerFormSchema} initialValues={registerInitialValues} onSubmit={() => {}}>
+        {(props: any) => (
+          <Form>
+            <FormItem name={phone.name}>
+              <Input
+                prefix={<PhoneInputPrefix>+86</PhoneInputPrefix>}
+                {...phone}
+                size="large"
+              />
+            </FormItem>
+            <FormItem name={email.name}>
+              <Input {...email} size="large"></Input>
+            </FormItem>
+            <FormItem name={verifyCode.name}>
+              <VerifyInput
+                {...verifyCode}
+                sendVerifyCode={() =>
+                  new Promise((resolve: any, reject: any) => {
+                    console.log("not thing here");
+                    resolve();
+                  })
+                }
+                buttonDisabled={props.errors[phone.name] || !props.values[phone.name]}
+                size="large"
+              />
+            </FormItem>
+            <FormItem name={password.name}>
+              <Input.Password size="large" {...password}></Input.Password>
+            </FormItem>
+            <FormItem name={confirmPassword.name}>
+              <Input.Password
+                size="large"
+                {...confirmPassword}
+              ></Input.Password>
+            </FormItem>
+            <Flex>
+              <span>
+                <RouteLink to={`/login`}>已有账号？前往登录</RouteLink>
+              </span>
+            </Flex>
+            <SubmitButton>注册</SubmitButton>
+          </Form>
+        )}
+      </Formik>
     </SimpleLayout>
   );
 };
 
-export default Register
+export default Register;
