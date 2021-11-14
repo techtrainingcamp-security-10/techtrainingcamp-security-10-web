@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from '../pages/login'
 import Register from '../pages/register';
+import Remain from '../pages/remain';
 
 export interface RouteWithComponent {
   component?: React.ComponentType<{ children?: React.ReactNode, [prop: string]: any }>
@@ -25,6 +26,11 @@ export const routes: RouteWithComponent = {
       path: "/register",
       exact: true,
       component: Register,
+    },
+    {
+      path: "/remain/:id",
+      exact: true,
+      component: Remain,
     }
   ],
 }

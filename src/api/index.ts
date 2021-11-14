@@ -25,3 +25,7 @@ export const register = ({
     Password,
   });
 };
+
+export const logout = (SessionID: string, ActionType: number) => {
+  return client.delete("/api/logout", { data: { SessionID, ActionType} })
+}

@@ -9,40 +9,49 @@ import {
   loginFormSchema,
   loginInitialValues,
 } from "../../form/fields";
-import {
-  PhoneInputPrefix,
-  SubmitButton,
-} from "../../components/form";
+import { PhoneInputPrefix, SubmitButton } from "../../components/form";
 import withVerifyCode from "../../components/verifyCodeInput";
 import { ActionLink, RouteLink } from "../../components/link";
 import { Flex } from "../../components/layout";
 import { phoneLogin, passwordLogin } from "../../api";
 import { wrapFormikSubmitFunction } from "../../utils/form";
+import { useHistory } from "react-router-dom";
 
 const VerifyInput = withVerifyCode(Input);
 
-const {
-  verifyCode,
-  phone,
-  identifier,
-  password,
-  loginType
-} = loginForm;
+const { verifyCode, phone, identifier, password, loginType } = loginForm;
 
 const Login: React.FC<any> = () => {
   const [option, setOption] = useState(0);
+  const history = useHistory();
   const login = wrapFormikSubmitFunction((data: any) => {
-    const loginFunc = option === LOGIN_TYPE.PASSWORD ? passwordLogin : phoneLogin;
-    return loginFunc(data);
+    const loginFunc =
+      option === LOGIN_TYPE.PASSWORD ? passwordLogin : phoneLogin;
+    return loginFunc(data).then(({ status, data }: any) => {
+      if (status === 201) {
+        message.success(data.Message)
+        history.push(`/remain/${data.Data.SessionID}`);
+      } else {
+        console.log(data.Message)
+        message.error(data.Message)
+      }
+    })
   });
   const sendVerifyCode = wrapFormikSubmitFunction((data: any) => {
     const ret = verifyCode.sendVerifyCode(data);
-    return ret.then(({ data }: any) => { console.log(data.Data.VerifyCode); message.success(`您的验证码是：${data.Data.VerifyCode}`)})
+    return ret.then(({ status, data }: any) => {
+      console.log(data.Data.VerifyCode);
+      message.success(`您的验证码是：${data.Data.VerifyCode}`);
+    });
   });
   return (
     <SimpleLayout headTitle="登陆 | TST 10">
-      <Formik validationSchema={loginFormSchema} initialValues={loginInitialValues} onSubmit={login}>
-        {({values, errors, setFieldValue, setErrors, setTouched }: any) => (
+      <Formik
+        validationSchema={loginFormSchema}
+        initialValues={loginInitialValues}
+        onSubmit={login}
+      >
+        {({ values, errors, setFieldValue, setErrors, setTouched }: any) => (
           <Form>
             {
               <>
@@ -58,7 +67,12 @@ const Login: React.FC<any> = () => {
                     <FormItem name={verifyCode.name}>
                       <VerifyInput
                         {...verifyCode}
-                        sendVerifyCode={() => sendVerifyCode(values[phone.name], { setErrors, setTouched })}
+                        sendVerifyCode={() =>
+                          sendVerifyCode(values[phone.name], {
+                            setErrors,
+                            setTouched,
+                          })
+                        }
                         buttonDisabled={
                           errors[phone.name] || !values[phone.name]
                         }
@@ -77,7 +91,12 @@ const Login: React.FC<any> = () => {
                     </FormItem>
                   </>
                 )}
-                <ActionLink onClick={() => {setFieldValue(loginType.name, 1 - option); setOption(1 - option);}}>
+                <ActionLink
+                  onClick={() => {
+                    setFieldValue(loginType.name, 1 - option);
+                    setOption(1 - option);
+                  }}
+                >
                   {LOGIN_TYPE_NAME[1 - option]}
                 </ActionLink>
               </>

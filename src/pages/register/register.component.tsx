@@ -14,6 +14,7 @@ import { RouteLink } from "../../components/link";
 import { Flex } from "../../components/layout";
 import { wrapFormikSubmitFunction } from "../../utils/form";
 import { message } from "antd";
+import { useHistory } from "react-router-dom";
 
 const VerifyInput = withVerifyCode(Input);
 
@@ -21,13 +22,25 @@ const { verifyCode, phone, newPassword, confirmPassword, username } =
   registerForm;
 
 const Register: React.FC<any> = () => {
+  const history = useHistory()
   const onRegister = wrapFormikSubmitFunction((data: any) => {
-    return register(data)
+    return register(data).then(({ data, status }: any) => {
+      if (status < 300) {
+        message.success(data.Message);
+        history.push(`/login`);
+      } else {
+        console.log(data.Message);
+        message.error(data.Message);
+      }
+    });
   });
 
   const sendVerifyCode = wrapFormikSubmitFunction((data: any) => {
     const ret = verifyCode.sendVerifyCode(data);
-    return ret.then(({ data }: any) => { console.log(data.Data.VerifyCode); message.success(`您的验证码是：${data.Data.VerifyCode}`)})
+    return ret.then(({ data }: any) => {
+      console.log(data.Data.VerifyCode);
+      message.success(`您的验证码是：${data.Data.VerifyCode}`);
+    });
   });
 
   return (

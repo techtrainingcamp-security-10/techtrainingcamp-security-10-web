@@ -3,7 +3,11 @@ import axios from "axios";
 
 declare let returnCitySN: { cip: string; cid: string; cname: string };
 
-const client = axios.create({});
+const client = axios.create({
+  validateStatus: function (status) {
+    return status < 500; // Reject only if the status code is greater than or equal to 500
+  }
+});
 
 const randomId = () => {
   const charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZqwertyuiopasdfghjklzxcvbnm".split(
