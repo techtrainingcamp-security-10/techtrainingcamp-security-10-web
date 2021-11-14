@@ -4,5 +4,5 @@
 
 + [x] Login UI
 + [x] Register UI
-+ [ ] Login Api
-+ [ ] Register Api
++ [x] Login Api
++ [x] Register Api
