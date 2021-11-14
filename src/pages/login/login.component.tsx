@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Divider, message } from "antd";
 import { Formik } from "formik";
 import { Form, FormItem, Input } from "formik-antd";
 import React, { useState, useEffect } from "react";
@@ -16,6 +16,8 @@ import {
 import withVerifyCode from "../../components/verifyCodeInput";
 import { ActionLink, RouteLink } from "../../components/link";
 import { Flex } from "../../components/layout";
+import { phoneLogin, passwordLogin } from "../../api";
+import { wrapFormikSubmitFunction } from "../../utils/form";
 
 const VerifyInput = withVerifyCode(Input);
 
@@ -29,11 +31,18 @@ const {
 
 const Login: React.FC<any> = () => {
   const [option, setOption] = useState(0);
-  console.log(loginFormSchema)
+  const login = wrapFormikSubmitFunction((data: any) => {
+    const loginFunc = option === LOGIN_TYPE.PASSWORD ? passwordLogin : phoneLogin;
+    return loginFunc(data);
+  });
+  const sendVerifyCode = wrapFormikSubmitFunction((data: any) => {
+    const ret = verifyCode.sendVerifyCode(data);
+    return ret.then(({ data }: any) => { console.log(data.Data.VerifyCode); message.success(`您的验证码是：${data.Data.VerifyCode}`)})
+  });
   return (
     <SimpleLayout headTitle="登陆 | TST 10">
-      <Formik validationSchema={loginFormSchema} initialValues={loginInitialValues} onSubmit={() => {}}>
-        {({values, errors, setFieldValue}: any) => (
+      <Formik validationSchema={loginFormSchema} initialValues={loginInitialValues} onSubmit={login}>
+        {({values, errors, setFieldValue, setErrors, setTouched }: any) => (
           <Form>
             {
               <>
@@ -49,12 +58,7 @@ const Login: React.FC<any> = () => {
                     <FormItem name={verifyCode.name}>
                       <VerifyInput
                         {...verifyCode}
-                        sendVerifyCode={() =>
-                          new Promise((resolve: any, reject: any) => {
-                            console.log("not thing here");
-                            resolve();
-                          })
-                        }
+                        sendVerifyCode={() => sendVerifyCode(values[phone.name], { setErrors, setTouched })}
                         buttonDisabled={
                           errors[phone.name] || !values[phone.name]
                         }

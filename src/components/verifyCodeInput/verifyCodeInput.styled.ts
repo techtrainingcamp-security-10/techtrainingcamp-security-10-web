@@ -4,7 +4,7 @@ import { Button as AntButton } from 'antd';
 import * as mixins from '../../styles/mixins';
 import { colors } from '../../styles';
 
-export const SendEmailButton = styled(AntButton)`
+export const SendVerifyCodeButton = styled(AntButton)`
   height: 22px !important;
   line-height: 22px !important;
   padding: 0 4px !important;

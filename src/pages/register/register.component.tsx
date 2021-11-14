@@ -7,30 +7,37 @@ import {
   registerFormSchema,
   registerInitialValues,
 } from "../../form/fields";
-import {
-  PhoneInputPrefix,
-  SubmitButton,
-} from "../../components/form";
+import { PhoneInputPrefix, SubmitButton } from "../../components/form";
+import { register } from "../../api";
 import withVerifyCode from "../../components/verifyCodeInput";
 import { RouteLink } from "../../components/link";
 import { Flex } from "../../components/layout";
+import { wrapFormikSubmitFunction } from "../../utils/form";
+import { message } from "antd";
 
 const VerifyInput = withVerifyCode(Input);
 
-const {
-  verifyCode,
-  phone,
-  newPassword,
-  confirmPassword,
-  email
-} = registerForm;
+const { verifyCode, phone, newPassword, confirmPassword, username } =
+  registerForm;
 
 const Register: React.FC<any> = () => {
+  const onRegister = wrapFormikSubmitFunction((data: any) => {
+    return register(data)
+  });
+
+  const sendVerifyCode = wrapFormikSubmitFunction((data: any) => {
+    const ret = verifyCode.sendVerifyCode(data);
+    return ret.then(({ data }: any) => { console.log(data.Data.VerifyCode); message.success(`您的验证码是：${data.Data.VerifyCode}`)})
+  });
 
   return (
     <SimpleLayout headTitle="注册 | TST 10">
-      <Formik validationSchema={registerFormSchema} initialValues={registerInitialValues} onSubmit={() => {}}>
-        {(props: any) => (
+      <Formik
+        validationSchema={registerFormSchema}
+        initialValues={registerInitialValues}
+        onSubmit={onRegister}
+      >
+        {({ values, errors, setTouched, setErrors }: any) => (
           <Form>
             <FormItem name={phone.name}>
               <Input
@@ -39,19 +46,16 @@ const Register: React.FC<any> = () => {
                 size="large"
               />
             </FormItem>
-            <FormItem name={email.name}>
-              <Input {...email} size="large"></Input>
+            <FormItem name={username.name}>
+              <Input {...username} size="large"></Input>
             </FormItem>
             <FormItem name={verifyCode.name}>
               <VerifyInput
                 {...verifyCode}
                 sendVerifyCode={() =>
-                  new Promise((resolve: any, reject: any) => {
-                    console.log("not thing here");
-                    resolve();
-                  })
+                  sendVerifyCode(values[phone.name], { setErrors, setTouched })
                 }
-                buttonDisabled={props.errors[phone.name] || !props.values[phone.name]}
+                buttonDisabled={errors[phone.name] || !values[phone.name]}
                 size="large"
               />
             </FormItem>

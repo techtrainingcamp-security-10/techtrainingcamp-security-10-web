@@ -69,3 +69,9 @@ export const buildInitialValues = (formData: any) => {
 
   return initialValues;
 };
+
+export const wrapFormikSubmitFunction = (func: any, onError?: any, throwErrors = false) => {
+  return (params: any, formikHelpers: any) => {
+    return Promise.resolve(func(params)).catch((response: any) => {});
+  };
+};

@@ -17,13 +17,13 @@ const VerifyCodeSuffix = (props: any) => {
   switch (state) {
     case constants.STATE_LIMIT:
       return (
-        <Styled.SendEmailButton type="link" disabled size="small">
+        <Styled.SendVerifyCodeButton type="link" disabled size="small">
           <CountDown total={countDownTotal} onFinished={onCountDownFinished} formatter={countDownFormatter} />
-        </Styled.SendEmailButton>
+        </Styled.SendVerifyCodeButton>
       );
     default:
       return (
-        <Styled.SendEmailButton
+        <Styled.SendVerifyCodeButton
           disabled={disabled}
           loading={state === constants.STATE_SENDING}
           type="link"
@@ -31,7 +31,7 @@ const VerifyCodeSuffix = (props: any) => {
           size="small"
         >
           {sendVerifyCodeBtnText}
-        </Styled.SendEmailButton>
+        </Styled.SendVerifyCodeButton>
       );
   }
 };
